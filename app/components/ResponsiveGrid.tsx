@@ -61,6 +61,7 @@ interface GridItemProps {
  *   コンテンツ
  * </GridItem>
  */
+
 export const GridItem: React.FC<GridItemProps> = ({
 	column,
 	row,
