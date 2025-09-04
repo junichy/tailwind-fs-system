@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useResponsiveGrid } from '../hooks/useResponsiveGrid';
 
 interface GridProps {
 	columns: string; // "48 200 500" のような文字列
 	rows: string; // "100 500" のような文字列
+	mobileColumns?: string; // モバイル用のカラムサイズ
+	mobileRows?: string; // モバイル用のロウサイズ
 	gap?: number;
+	mobileGap?: number; // モバイル用のギャップ
 	isMobile?: boolean;
 	className?: string;
 	children?: React.ReactNode;
@@ -21,14 +24,35 @@ interface GridProps {
 export const ResponsiveGrid: React.FC<GridProps> = ({
 	columns,
 	rows,
+	mobileColumns,
+	mobileRows,
 	gap = 16,
+	mobileGap,
 	isMobile = false,
 	className = '',
 	children,
 	style = {},
 }) => {
 	const { grid } = useResponsiveGrid();
-	const gridStyles = grid(columns, rows, gap, isMobile);
+	const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+	useEffect(() => {
+		const checkScreenSize = () => {
+			setIsSmallScreen(window.innerWidth < 768);
+		};
+
+		checkScreenSize();
+		window.addEventListener('resize', checkScreenSize);
+		return () => window.removeEventListener('resize', checkScreenSize);
+	}, []);
+
+	// モバイル時は専用の設定を使用
+	const shouldUseMobile = isSmallScreen || isMobile;
+	const finalColumns = shouldUseMobile && mobileColumns ? mobileColumns : columns;
+	const finalRows = shouldUseMobile && mobileRows ? mobileRows : rows;
+	const finalGap = shouldUseMobile && mobileGap !== undefined ? mobileGap : gap;
+
+	const gridStyles = grid(finalColumns, finalRows, finalGap, shouldUseMobile);
 
 	return (
 		<div

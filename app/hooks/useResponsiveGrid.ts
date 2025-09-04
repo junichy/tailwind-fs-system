@@ -16,22 +16,22 @@ export const fs = (maxSize: number, ratio = 0.75): string => {
 };
 
 /**
- * fsm関数の計算ロジック
- * @param size360 - 360pxでのサイズ
- * @param ratio320 - 320pxでの比率（デフォルト0.89）
- * @param ratio767 - 767pxでの比率（デフォルト1.7）
+ * fsm関数の計算ロジック（シンプル版）
+ * @param baseSize - デザイン基準のサイズ
+ * @param minRatio - 最小画面での縮小率（デフォルト0.8）
+ * @param maxRatio - 最大画面での拡大率（デフォルト1.2）
  */
 export const fsm = (
-	size360: number,
-	ratio320 = 0.89,
-	ratio767 = 1.7
+	baseSize: number,
+	minRatio = 0.8,
+	maxRatio = 1.2
 ): string => {
-	const minVw = 320;
-	const maxVw = 767;
-	const size320 = size360 * ratio320;
-	const size767 = size360 * ratio767;
+	const minVw = 320; // 最小モバイル幅
+	const maxVw = 767; // 最大モバイル幅
+	const minSize = baseSize * minRatio;
+	const maxSize = baseSize * maxRatio;
 
-	return `calc(${size320}px + ${size767 - size320} * ((100vw - ${minVw}px) / ${
+	return `calc(${minSize}px + ${maxSize - minSize} * ((100vw - ${minVw}px) / ${
 		maxVw - minVw
 	}))`;
 };

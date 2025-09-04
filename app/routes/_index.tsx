@@ -178,14 +178,21 @@ export default function Index() {
 						</div>
 
 						{/* fs関数デモ */}
-						<div className='bg-white rounded-fs-16 p-fs-32 mb-fs-32 shadow-lg'>
-							<h3 className='fs-24 font-bold text-gray-900 mb-fs-24'>
+						<div className='bg-white rounded-fs-16 rounded-fsm-12 p-fs-32 p-fsm-20 mb-fs-32 mb-fsm-24 shadow-lg'>
+							<h3 className='fs-24 fsm-20 font-bold text-gray-900 mb-fs-24 mb-fsm-16'>
 								グリッド重なりデモ
 							</h3>
-							<p className='fs-14 text-gray-600 mb-fs-24'>
+							<p className='fs-14 fsm-12 text-gray-600 mb-fs-24 mb-fsm-16'>
 								Item1とItem2が重なるレイアウト例
 							</p>
-							<ResponsiveGrid columns='200 300 200' rows='150 250 150' gap={0}>
+							<ResponsiveGrid
+								columns='200 300 200'
+								rows='150 250 150'
+								mobileColumns='80 120 80'
+								mobileRows='100 150 100'
+								gap={0}
+								mobileGap={0}
+							>
 								<GridItem
 									column={1}
 									row={1}
@@ -193,10 +200,14 @@ export default function Index() {
 									rowSpan={2}
 									zIndex={1}
 								>
-									<div className='bg-blue-500 bg-opacity-90 h-full rounded-fs-16 p-fs-24 text-white'>
-										<h4 className='fs-18 font-bold mb-fs-8'>Item 1</h4>
-										<p className='fs-14'>column: 1-2, row: 1-2</p>
-										<p className='fs-12 mt-fs-8'>背面レイヤー</p>
+									<div className='bg-blue-500 bg-opacity-90 h-full rounded-fs-16 rounded-fsm-10 p-fs-24 p-fsm-16 text-white'>
+										<h4 className='fs-18 fsm-14 font-bold mb-fs-8 mb-fsm-6'>
+											Item 1
+										</h4>
+										<p className='fs-14 fsm-11'>column: 1-2, row: 1-2</p>
+										<p className='fs-12 fsm-10 mt-fs-8 mt-fsm-6'>
+											背面レイヤー
+										</p>
 									</div>
 								</GridItem>
 								<GridItem
@@ -206,16 +217,20 @@ export default function Index() {
 									rowSpan={2}
 									zIndex={10}
 								>
-									<div className='bg-purple-600 bg-opacity-95 h-full rounded-fs-16 p-fs-24 text-white shadow-2xl'>
-										<h4 className='fs-18 font-bold mb-fs-8'>Item 2</h4>
-										<p className='fs-14'>column: 2-3, row: 2-3</p>
-										<p className='fs-12 mt-fs-8'>前面レイヤー（重なり）</p>
+									<div className='bg-purple-600 bg-opacity-95 h-full rounded-fs-16 rounded-fsm-10 p-fs-24 p-fsm-16 text-white shadow-2xl'>
+										<h4 className='fs-18 fsm-14 font-bold mb-fs-8 mb-fsm-6'>
+											Item 2
+										</h4>
+										<p className='fs-14 fsm-11'>column: 2-3, row: 2-3</p>
+										<p className='fs-12 fsm-10 mt-fs-8 mt-fsm-6'>
+											前面レイヤー（重なり）
+										</p>
 									</div>
 								</GridItem>
 								<GridItem column={3} row={1} zIndex={5}>
-									<div className='bg-green-500 h-full rounded-fs-12 p-fs-16 text-white'>
-										<h4 className='fs-16 font-bold'>Item 3</h4>
-										<p className='fs-12'>単独セル</p>
+									<div className='bg-green-500 h-full rounded-fs-12 rounded-fsm-8 p-fs-16 p-fsm-12 text-white'>
+										<h4 className='fs-16 fsm-12 font-bold'>Item 3</h4>
+										<p className='fs-12 fsm-10'>単独セル</p>
 									</div>
 								</GridItem>
 							</ResponsiveGrid>

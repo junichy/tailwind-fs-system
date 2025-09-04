@@ -12,6 +12,9 @@ export default {
 				lg: '1024px',
 				xl: '1280px',
 				'2xl': '1440px',
+				'3xl': '1920px', // Full HD
+				'4xl': '2560px', // 2K/1440p
+				'5xl': '3840px', // 4K
 			},
 			colors: {
 				main: '#3f3f3f',
@@ -72,11 +75,12 @@ export default {
 				const minVw = 768; // タブレット最小幅
 				const baseVw = 1440; // Figma PCデザイン基準幅
 				const minSize = maxSize * ratio;
+				const maxLimitSize = maxSize * 1.5; // 最大でも1.5倍まで
 
 				return {
-					fontSize: `calc(${minSize}px + ${
+					fontSize: `clamp(${minSize}px, calc(${minSize}px + ${
 						maxSize - minSize
-					} * ((100vw - ${minVw}px) / ${baseVw - minVw}))`,
+					} * ((100vw - ${minVw}px) / ${baseVw - minVw})), ${maxLimitSize}px)`,
 				};
 			};
 
@@ -88,18 +92,19 @@ export default {
 				return `${vwValue}vw`;
 			};
 
-			// fsm関数: モバイル専用レスポンシブサイズ（Figmaデザイン対応）
-			// 基準: 360px（Figma SPデザイン）
-			// 使用例: class="fsm-16" (360pxで16px基準)
-			const createFsmUtility = (size360, ratio320 = 0.89, ratio767 = 1.7) => {
-				const minVw = 480; // 最小モバイル幅
+			// fsm関数: モバイル専用レスポンシブサイズ（シンプル版）
+			// 使用例: class="fsm-16" (デザイン基準16px)
+			// minRatio: 最小画面での縮小率（デフォルト0.8 = 80%）
+			// maxRatio: 最大画面での拡大率（デフォルト1.2 = 120%）
+			const createFsmUtility = (baseSize, minRatio = 0.8, maxRatio = 1.2) => {
+				const minVw = 320; // 最小モバイル幅
 				const maxVw = 767; // モバイル最大幅（768px未満）
-				const size320 = size360 * ratio320;
-				const size767 = size360 * ratio767;
+				const minSize = baseSize * minRatio;
+				const maxSize = baseSize * maxRatio;
 
 				return {
-					fontSize: `calc(${size320}px + ${
-						size767 - size320
+					fontSize: `calc(${minSize}px + ${
+						maxSize - minSize
 					} * ((100vw - ${minVw}px) / ${maxVw - minVw}))`,
 				};
 			};
@@ -109,9 +114,10 @@ export default {
 			const fsmUtilities = {};
 			const fsVwUtilities = {};
 
-			// fs関数のプリセット（デフォルト縮小率0.75）
+			// fs関数のプリセット - 基本的なサイズ
+			// JITモードなので、実際に使われる値のみがCSSに含まれる
 			const fsSizes = [
-				12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80,
+				...Array.from({ length: 201 }, (_, i) => i), // 0-200まですべて
 			];
 			fsSizes.forEach((size) => {
 				fsUtilities[`.fs-${size}`] = createFsUtility(size);
@@ -124,8 +130,9 @@ export default {
 			});
 
 			// fs-vw関数のプリセット（グリッド用の一般的なサイズ）
+			// JITモードなので、実際に使われる値のみがCSSに含まれる
 			const fsVwSizes = [
-				76, 100, 120, 216, 280, 360, 480, 536, 640, 720, 960, 1200, 1440,
+				...Array.from({ length: 1441 }, (_, i) => i), // 0-1440まですべて（画面幅基準）
 			];
 			fsVwSizes.forEach((size) => {
 				// widthユーティリティ
@@ -151,9 +158,9 @@ export default {
 			});
 
 			// Width・Padding・Margin用のfs関数ユーティリティ
+			// JITモードなので、実際に使われる値のみがCSSに含まれる
 			const sizingSizes = [
-				8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 80, 96, 120, 150, 200, 250,
-				300, 350, 400, 450, 500, 600, 800,
+				...Array.from({ length: 1001 }, (_, i) => i), // 0-1000まですべて
 			];
 			const sizingUtilities = {};
 
@@ -345,8 +352,9 @@ export default {
 			});
 
 			// fsm版も追加
+			// JITモードなので、実際に使われる値のみがCSSに含まれる
 			const fsmSizingSizes = [
-				8, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80, 100, 150, 200, 250, 300,
+				...Array.from({ length: 501 }, (_, i) => i), // 0-500まですべて（モバイル用）
 			];
 
 			fsmSizingSizes.forEach((size) => {
@@ -380,7 +388,7 @@ export default {
 			});
 
 			// fsm関数のプリセット（デフォルト比率）
-			const fsmSizes = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48];
+			const fsmSizes = [...Array.from({ length: 101 }, (_, i) => i)];
 			fsmSizes.forEach((size) => {
 				fsmUtilities[`.fsm-${size}`] = {
 					'@media (max-width: 767px)': createFsmUtility(size),
